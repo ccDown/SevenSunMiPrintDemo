@@ -1,5 +1,8 @@
 package com.seven.sevensunmiprintdemo;
 
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.seven.sevensunmiprintdemo.bean.CardInfo;
 import com.seven.sevensunmiprintdemo.bean.ClearPrinterTemplet;
@@ -41,7 +45,8 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     private Button btnPrintEwallet;
     private Button btnPrintEwalletCancel;
     private Button btnPrintClear;
-
+    private Button btnPay;
+    private Button btnIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         btnPrintEwalletCancel = findViewById(R.id.btn_printewalltcancel);
         btnPrintClear = findViewById(R.id.btn_printeclear);
 
+        btnIntent = findViewById(R.id.btn_intent);
+        btnPay = findViewById(R.id.btn_pay);
+
         cbBold.setOnCheckedChangeListener(this);
         cbUnderLine.setOnCheckedChangeListener(this);
         btnPrint.setOnClickListener(this);
@@ -67,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         btnPrintEwallet.setOnClickListener(this);
         btnPrintEwalletCancel.setOnClickListener(this);
         btnPrintClear.setOnClickListener(this);
+        btnPay.setOnClickListener(this);
+        btnIntent.setOnClickListener(this);
     }
 
     @Override
@@ -240,8 +250,37 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                     e.printStackTrace();
                 }
                 break;
+            case R.id.btn_pay:
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName("com.shengpay.smartpos.shengpaysdk","com.shengpay.smartpos.shengpaysdk.activity.MainActivity"));
+                intent.putExtra("transName", "0");
+                intent.putExtra("appId", getPackageName());
+                intent.putExtra("amount", "000000000001");
+                startActivityForResult(intent, 0);
+                break;
+            case R.id.btn_intent:
+                Intent intent1 = new Intent();
+                intent1.setComponent(new ComponentName("com.seven.sevensunmiprintdemo","com.seven.sevensunmiprintdemo.MainActivity"));
+                startActivity(intent1);
+                break;
                 default:
                     break;
         }
+    }
+    @Override
+    protected void onActivityResult(int requestCode
+            , int resultCode, Intent data) {
+        switch(resultCode) {
+            case Activity.RESULT_CANCELED:
+                String reason = data.getStringExtra("reason");
+                if(reason != null) {
+                    Toast.makeText(this, reason, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case Activity.RESULT_OK:
+                break;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
