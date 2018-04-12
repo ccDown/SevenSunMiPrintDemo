@@ -71,4 +71,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-</LinearLayout></ScrollView>
+    <Button
+        android:text="进行交易"
+        android:id="@+id/btn_pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:visibility="gone"
+        android:text="界面跳转"
+        android:id="@+id/btn_intent"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
+</ScrollView>
